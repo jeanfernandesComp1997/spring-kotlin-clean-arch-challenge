@@ -1,0 +1,49 @@
+spring:
+  port: 8080
+  r2dbc:
+    url: r2dbc:h2:mem:///userdb
+    username:
+    password:
+#  r2dbc:
+#    url: r2dbc:postgresql://localhost:5432/userdb
+#    username: postgres
+#    password: 123
+
+  data:
+    r2dbc:
+      repositories:
+        enabled: true
+
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
+    username: ${SMTP_USER}
+    password: ${SMTP_PASS}
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        debug: true
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+database:
+  h2:
+    active: ${H2_ACTIVE}
+
+logging:
+  level:
+    io.r2dbc.h2.QUERY: DEBUG # for queries
+    io.r2dbc.h2.PARAM: DEBUG # for parameters
+#logging:
+#  level:
+#    io.r2dbc.postgresql.QUERY: DEBUG # for queries
+#    io.r2dbc.postgresql.PARAM: DEBUG # for parameters
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
