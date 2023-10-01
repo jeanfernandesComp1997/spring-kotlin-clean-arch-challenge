@@ -1,8 +1,11 @@
 package com.sample.cleanarch.core.entity
 
+import com.sample.cleanarch.core.entity.valueobjects.UserType
 import java.time.LocalDate
 
 class ShopKeeper : User {
+
+    val type = UserType.SHOPKEEPER
 
     constructor(
         name: String,

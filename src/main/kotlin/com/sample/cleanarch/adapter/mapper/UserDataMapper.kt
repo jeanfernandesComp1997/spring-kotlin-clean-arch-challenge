@@ -12,6 +12,7 @@ data class UserDataMapper(
     @Column("birth_date")
     val birthDate: LocalDate,
     val email: String,
+    val type: String,
     val password: String,
     val balance: Double
 )

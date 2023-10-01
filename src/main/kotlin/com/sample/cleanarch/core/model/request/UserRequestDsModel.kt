@@ -8,6 +8,7 @@ data class UserRequestDsModel(
     val document: String,
     val birthDate: LocalDate,
     val email: String,
+    val type: String,
     val password: String,
     val balance: Double
 )

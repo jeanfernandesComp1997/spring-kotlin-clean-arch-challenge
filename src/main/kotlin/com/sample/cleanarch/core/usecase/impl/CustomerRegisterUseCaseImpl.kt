@@ -45,6 +45,7 @@ class CustomerRegisterUseCaseImpl(
             customer.document,
             customer.birthDate.value,
             customer.email.value,
+            customer.type.name,
             customer.password.value,
             customer.balance
         )
@@ -66,6 +67,7 @@ class CustomerRegisterUseCaseImpl(
             customer.document,
             customer.birthDate.value,
             customer.email.value,
+            customer.type.name,
             customer.balance
         )
 
