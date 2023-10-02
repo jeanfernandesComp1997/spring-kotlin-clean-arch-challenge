@@ -12,8 +12,7 @@ class FindCustomerByIdUseCaseImpl(
     private val customerPresenter: CustomerPresenter
 ) : FindCustomerByIdUseCase {
     override suspend fun find(customerId: String): CustomerResponseModel {
-        val customer = userDsGateway.findByIdAndType(customerId, UserType.COMMON_CUSTOMER.name)
-        return customer?.let {
+        return userDsGateway.findByIdAndType(customerId, UserType.COMMON_CUSTOMER.name)?.let { customer ->
             customerPresenter.prepareSuccessView(
                 CustomerResponseModel(
                     customer.id,

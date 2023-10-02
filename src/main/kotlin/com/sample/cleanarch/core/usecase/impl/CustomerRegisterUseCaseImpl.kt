@@ -30,7 +30,6 @@ class CustomerRegisterUseCaseImpl(
         if (userDsGateway.existsByDocumentOrEmail(command.document, command.email)) {
             return customerPresenter.prepareFailView(UserAlreadyExistsException())
         }
-
         val customer = Customer(
             command.name,
             command.document,
@@ -38,7 +37,6 @@ class CustomerRegisterUseCaseImpl(
             command.email,
             command.password
         )
-
         val userDsModel = UserRequestDsModel(
             customer.id,
             customer.name,
@@ -49,18 +47,14 @@ class CustomerRegisterUseCaseImpl(
             customer.password.value,
             customer.balance
         )
-
         userDsGateway.save(userDsModel)
-
         val greetingsEmail = EmailRequestServiceModel(
             EmailAddressRequestServiceModel(customer.email.value, customer.name),
             EmailAddressRequestServiceModel(DEFAULT_BANK_EMAIL, DEFAULT_BANK_NAME),
             DEFAULT_SUBJECT,
             "$DEFAULT_GREETING_MESSAGE ${customer.name}!"
         )
-
         emailService.send(greetingsEmail)
-
         val customerResponseModel = CustomerResponseModel(
             customer.id,
             customer.name,
@@ -70,7 +64,6 @@ class CustomerRegisterUseCaseImpl(
             customer.type.name,
             customer.balance
         )
-
         return customerPresenter.prepareSuccessView(customerResponseModel)
     }
 }

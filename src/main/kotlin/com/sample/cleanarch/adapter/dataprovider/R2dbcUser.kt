@@ -32,7 +32,6 @@ class R2dbcUser(
             userRequestDsModel.password,
             userRequestDsModel.balance
         )
-
         repository.save(userDataMapped).awaitSingle()
     }
 
