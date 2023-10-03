@@ -1,5 +1,4 @@
 spring:
-  port: 8080
   r2dbc:
     url: r2dbc:h2:mem:///userdb
     username:
@@ -35,12 +34,7 @@ database:
 
 logging:
   level:
-    io.r2dbc.h2.QUERY: DEBUG # for queries
-    io.r2dbc.h2.PARAM: DEBUG # for parameters
-#logging:
-#  level:
-#    io.r2dbc.postgresql.QUERY: DEBUG # for queries
-#    io.r2dbc.postgresql.PARAM: DEBUG # for parameters
+    io.r2dbc.h2: DEBUG
 
 management:
   endpoints:
