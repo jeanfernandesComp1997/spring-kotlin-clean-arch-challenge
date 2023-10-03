@@ -6,9 +6,7 @@ import com.sample.cleanarch.core.model.response.UserResponseDsModel
 import com.sample.cleanarch.core.port.UserFindByIdDsGateway
 import com.sample.cleanarch.core.port.UserRegisterDsGateway
 import kotlinx.coroutines.reactor.awaitSingle
-import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.stereotype.Component
-import reactor.core.publisher.Mono
 
 @Component
 class R2dbcUser(
@@ -18,7 +16,6 @@ class R2dbcUser(
     override suspend fun existsByDocumentOrEmail(document: String, email: String): Boolean {
         return repository
             .existsByDocumentOrEmail(document, email)
-            .awaitSingle()
     }
 
     override suspend fun save(userRequestDsModel: UserRequestDsModel) {
@@ -38,7 +35,7 @@ class R2dbcUser(
     override suspend fun findByIdAndType(id: String, type: String): UserResponseDsModel? {
         return repository
             .findByIdAndType(id, type)
-            .map { userDataMapper ->
+            ?.let { userDataMapper ->
                 UserResponseDsModel(
                     userDataMapper.id,
                     userDataMapper.name,
@@ -49,6 +46,5 @@ class R2dbcUser(
                     userDataMapper.balance
                 )
             }
-            .awaitSingleOrNull()
     }
 }

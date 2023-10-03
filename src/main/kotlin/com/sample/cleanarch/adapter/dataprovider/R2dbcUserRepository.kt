@@ -8,7 +8,6 @@ import reactor.core.publisher.Mono
 @Repository
 interface R2dbcUserRepository : ReactiveCrudRepository<UserDataMapper, String> {
 
-    fun existsByDocumentOrEmail(document: String, email: String): Mono<Boolean>
-    fun existsByDocument(document: String): Mono<Boolean>
-    fun findByIdAndType(id: String, type: String): Mono<UserDataMapper>
+    suspend fun existsByDocumentOrEmail(document: String, email: String): Boolean
+    suspend fun findByIdAndType(id: String, type: String): UserDataMapper?
 }
