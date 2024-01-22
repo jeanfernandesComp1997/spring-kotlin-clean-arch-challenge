@@ -1,21 +1,21 @@
 package com.sample.cleanarch.core.usecase.impl
 
-import com.sample.cleanarch.core.command.CreateCustomerCommand
+import com.sample.cleanarch.core.dto.CreateCustomerRequestDto
+import com.sample.cleanarch.core.dto.CreateUserDataSourceDto
+import com.sample.cleanarch.core.dto.CustomerDto
+import com.sample.cleanarch.core.dto.EmailAddressRequestDto
+import com.sample.cleanarch.core.dto.SendEmailRequestDto
 import com.sample.cleanarch.core.entity.Customer
 import com.sample.cleanarch.core.exception.UserAlreadyExistsException
-import com.sample.cleanarch.core.model.request.EmailAddressRequestServiceModel
-import com.sample.cleanarch.core.model.request.EmailRequestServiceModel
-import com.sample.cleanarch.core.model.request.UserRequestDsModel
-import com.sample.cleanarch.core.model.response.CustomerResponseModel
-import com.sample.cleanarch.core.port.CustomerPresenter
-import com.sample.cleanarch.core.port.SendEmailService
-import com.sample.cleanarch.core.port.UserRegisterDsGateway
+import com.sample.cleanarch.core.gateway.EmailGateway
+import com.sample.cleanarch.core.gateway.UserRegisterDataSourceGateway
 import com.sample.cleanarch.core.usecase.CustomerRegisterUseCase
+import org.springframework.stereotype.Service
 
+@Service
 class CustomerRegisterUseCaseImpl(
-    private val userDsGateway: UserRegisterDsGateway,
-    private val emailService: SendEmailService,
-    private val customerPresenter: CustomerPresenter
+    private val userDsGateway: UserRegisterDataSourceGateway,
+    private val emailService: EmailGateway
 ) : CustomerRegisterUseCase {
 
     companion object {
@@ -26,18 +26,18 @@ class CustomerRegisterUseCaseImpl(
         private const val DEFAULT_SUBJECT = "Best Bank Greetings!"
     }
 
-    override suspend fun create(command: CreateCustomerCommand): CustomerResponseModel {
-        if (userDsGateway.existsByDocumentOrEmail(command.document, command.email)) {
-            return customerPresenter.prepareFailView(UserAlreadyExistsException())
+    override suspend fun execute(createCustomerRequest: CreateCustomerRequestDto): CustomerDto {
+        if (userDsGateway.existsByDocumentOrEmail(createCustomerRequest.document, createCustomerRequest.email)) {
+            throw UserAlreadyExistsException()
         }
         val customer = Customer(
-            command.name,
-            command.document,
-            command.birthDate,
-            command.email,
-            command.password
+            createCustomerRequest.name,
+            createCustomerRequest.document,
+            createCustomerRequest.birthDate,
+            createCustomerRequest.email,
+            createCustomerRequest.password
         )
-        val userDsModel = UserRequestDsModel(
+        val createUserDatasource = CreateUserDataSourceDto(
             customer.id,
             customer.name,
             customer.document,
@@ -47,15 +47,15 @@ class CustomerRegisterUseCaseImpl(
             customer.password.value,
             customer.balance
         )
-        userDsGateway.save(userDsModel)
-        val greetingsEmail = EmailRequestServiceModel(
-            EmailAddressRequestServiceModel(customer.email.value, customer.name),
-            EmailAddressRequestServiceModel(DEFAULT_BANK_EMAIL, DEFAULT_BANK_NAME),
+        userDsGateway.save(createUserDatasource)
+        val greetingsEmail = SendEmailRequestDto(
+            EmailAddressRequestDto(customer.email.value, customer.name),
+            EmailAddressRequestDto(DEFAULT_BANK_EMAIL, DEFAULT_BANK_NAME),
             DEFAULT_SUBJECT,
             "$DEFAULT_GREETING_MESSAGE ${customer.name}!"
         )
         emailService.send(greetingsEmail)
-        val customerResponseModel = CustomerResponseModel(
+        return CustomerDto(
             customer.id,
             customer.name,
             customer.document,
@@ -64,6 +64,5 @@ class CustomerRegisterUseCaseImpl(
             customer.type.name,
             customer.balance
         )
-        return customerPresenter.prepareSuccessView(customerResponseModel)
     }
 }

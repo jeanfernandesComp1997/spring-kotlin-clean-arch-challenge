@@ -1,21 +1,21 @@
-package com.sample.cleanarch.adapter.service
+package com.sample.cleanarch.gateway.email
 
-import com.sample.cleanarch.core.model.request.EmailRequestServiceModel
-import com.sample.cleanarch.core.port.SendEmailService
+import com.sample.cleanarch.core.dto.SendEmailRequestDto
+import com.sample.cleanarch.core.gateway.EmailGateway
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
 
 @Service
-class SendEmailServiceImpl(
+class EmailGatewayImpl(
     private val mailService: JavaMailSender
-) : SendEmailService {
+) : EmailGateway {
 
-    override suspend fun send(emailRequestServiceModel: EmailRequestServiceModel) {
-        mailService.send(generateEmail(emailRequestServiceModel))
+    override suspend fun send(sendEmailRequest: SendEmailRequestDto) {
+        mailService.send(generateEmail(sendEmailRequest))
     }
 
-    private fun generateEmail(emailRequestServiceModel: EmailRequestServiceModel): SimpleMailMessage {
+    private fun generateEmail(emailRequestServiceModel: SendEmailRequestDto): SimpleMailMessage {
         return SimpleMailMessage()
             .apply {
                 subject = emailRequestServiceModel.subject

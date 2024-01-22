@@ -1,9 +1,9 @@
-package com.sample.cleanarch.core.command
+package com.sample.cleanarch.core.dto
 
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 
-data class CreateCustomerCommand(
+data class CreateCustomerRequestDto(
     val name: String,
     val document: String,
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)

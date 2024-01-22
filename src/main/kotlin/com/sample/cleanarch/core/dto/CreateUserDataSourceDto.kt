@@ -1,8 +1,8 @@
-package com.sample.cleanarch.core.model.request
+package com.sample.cleanarch.core.dto
 
 import java.time.LocalDate
 
-data class UserRequestDsModel(
+data class CreateUserDataSourceDto(
     val id: String,
     val name: String,
     val document: String,

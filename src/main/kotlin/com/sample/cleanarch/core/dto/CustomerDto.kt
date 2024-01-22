@@ -1,12 +1,12 @@
-package com.sample.cleanarch.core.model.response
+package com.sample.cleanarch.core.dto
 
 import java.time.LocalDate
 
-class UserResponseDsModel(
+data class CustomerDto(
     val id: String,
     val name: String,
     val document: String,
-    val birthDate: LocalDate,
+    val birthDateTime: LocalDate,
     val email: String,
     val type: String,
     val balance: Double

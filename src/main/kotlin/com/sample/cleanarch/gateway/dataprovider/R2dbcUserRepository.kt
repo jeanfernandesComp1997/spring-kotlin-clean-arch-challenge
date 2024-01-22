@@ -1,9 +1,8 @@
-package com.sample.cleanarch.adapter.dataprovider
+package com.sample.cleanarch.gateway.dataprovider
 
-import com.sample.cleanarch.adapter.mapper.UserDataMapper
+import com.sample.cleanarch.shared.mapper.UserDataMapper
 import org.springframework.data.repository.reactive.ReactiveCrudRepository
 import org.springframework.stereotype.Repository
-import reactor.core.publisher.Mono
 
 @Repository
 interface R2dbcUserRepository : ReactiveCrudRepository<UserDataMapper, String> {
