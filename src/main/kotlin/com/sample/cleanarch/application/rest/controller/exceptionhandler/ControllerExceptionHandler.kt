@@ -8,7 +8,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 class ControllerExceptionHandler {
 
     @ExceptionHandler(Exception::class)
-    fun handleException(exception: Exception): ResponseEntity<Exception> {
-        return ResponseEntity.internalServerError().body(exception)
+    fun handleException(exception: Exception): ResponseEntity<Any> {
+        return ResponseEntity
+            .internalServerError()
+            .body(object {
+                val message = exception.message
+                val stackTrace = exception.stackTrace
+            })
     }
 }
