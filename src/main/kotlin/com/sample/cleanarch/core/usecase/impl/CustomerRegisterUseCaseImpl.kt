@@ -6,17 +6,25 @@ import com.sample.cleanarch.core.dto.CustomerDto
 import com.sample.cleanarch.core.dto.EmailAddressRequestDto
 import com.sample.cleanarch.core.dto.SendEmailRequestDto
 import com.sample.cleanarch.core.entity.Customer
+import com.sample.cleanarch.core.exception.DocumentRestrictionsException
 import com.sample.cleanarch.core.exception.UserAlreadyExistsException
+import com.sample.cleanarch.core.gateway.DocumentCheckerGateway
 import com.sample.cleanarch.core.gateway.EmailGateway
 import com.sample.cleanarch.core.gateway.UserRegisterDataSourceGateway
 import com.sample.cleanarch.core.usecase.CustomerRegisterUseCase
+import kotlinx.coroutines.reactive.awaitSingle
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 
 @Service
 class CustomerRegisterUseCaseImpl(
     private val userDsGateway: UserRegisterDataSourceGateway,
-    private val emailService: EmailGateway
+    private val emailService: EmailGateway,
+    private val documentCheckerGateway: DocumentCheckerGateway
 ) : CustomerRegisterUseCase {
+
+    val logger: Logger = LoggerFactory.getLogger(CustomerRegisterUseCaseImpl::class.java)
 
     companion object {
 
@@ -27,8 +35,14 @@ class CustomerRegisterUseCaseImpl(
     }
 
     override suspend fun execute(createCustomerRequest: CreateCustomerRequestDto): CustomerDto {
+        logger.info("Start creating customer in thread: ${Thread.currentThread().name}")
         if (userDsGateway.existsByDocumentOrEmail(createCustomerRequest.document, createCustomerRequest.email)) {
             throw UserAlreadyExistsException()
+        }
+        val restrictions =
+            documentCheckerGateway.retrieveDocumentRestrictions(createCustomerRequest.document).awaitSingle()
+        if (restrictions.isEmpty().not()) {
+            throw DocumentRestrictionsException()
         }
         val customer = Customer(
             createCustomerRequest.name,
