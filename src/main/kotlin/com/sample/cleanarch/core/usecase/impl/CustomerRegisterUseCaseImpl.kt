@@ -12,7 +12,6 @@ import com.sample.cleanarch.core.gateway.DocumentCheckerGateway
 import com.sample.cleanarch.core.gateway.EmailGateway
 import com.sample.cleanarch.core.gateway.UserRegisterDataSourceGateway
 import com.sample.cleanarch.core.usecase.CustomerRegisterUseCase
-import kotlinx.coroutines.reactive.awaitSingle
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Service
 @Service
 class CustomerRegisterUseCaseImpl(
     private val userDsGateway: UserRegisterDataSourceGateway,
-    private val emailService: EmailGateway,
+    private val emailGateway: EmailGateway,
     private val documentCheckerGateway: DocumentCheckerGateway
 ) : CustomerRegisterUseCase {
 
@@ -40,7 +39,7 @@ class CustomerRegisterUseCaseImpl(
             throw UserAlreadyExistsException()
         }
         val restrictions =
-            documentCheckerGateway.retrieveDocumentRestrictions(createCustomerRequest.document).awaitSingle()
+            documentCheckerGateway.retrieveDocumentRestrictions(createCustomerRequest.document)
         if (restrictions.isEmpty().not()) {
             throw DocumentRestrictionsException()
         }
@@ -68,7 +67,7 @@ class CustomerRegisterUseCaseImpl(
             DEFAULT_SUBJECT,
             "$DEFAULT_GREETING_MESSAGE ${customer.name}!"
         )
-        emailService.send(greetingsEmail)
+        emailGateway.send(greetingsEmail)
         return CustomerDto(
             customer.id,
             customer.name,

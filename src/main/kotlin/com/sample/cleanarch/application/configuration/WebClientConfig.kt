@@ -44,7 +44,7 @@ class WebClientConfig {
             .builder()
             .clientConnector(ReactorClientHttpConnector(httpClient))
             .baseUrl("http://localhost:9000")
-            .filter(this::setSessionToken)
+            .filter(this::setSessionTokenAsync)
             .build()
     }
 

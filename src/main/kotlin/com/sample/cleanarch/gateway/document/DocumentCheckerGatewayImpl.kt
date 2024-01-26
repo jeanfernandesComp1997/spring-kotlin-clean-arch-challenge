@@ -4,7 +4,7 @@ import com.sample.cleanarch.core.gateway.DocumentCheckerGateway
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.core.publisher.Mono
+import org.springframework.web.reactive.function.client.awaitBody
 
 @Component
 class DocumentCheckerGatewayImpl(
@@ -12,7 +12,7 @@ class DocumentCheckerGatewayImpl(
     private val webClient: WebClient
 ) : DocumentCheckerGateway {
 
-    override suspend fun retrieveDocumentRestrictions(document: String): Mono<Array<String>> {
+    override suspend fun retrieveDocumentRestrictions(document: String): List<String> {
         val params = mapOf("document" to document)
         return webClient
             .get()
@@ -22,6 +22,6 @@ class DocumentCheckerGatewayImpl(
                     .build(params)
             }
             .retrieve()
-            .bodyToMono(Array<String>::class.java)
+            .awaitBody()
     }
 }
