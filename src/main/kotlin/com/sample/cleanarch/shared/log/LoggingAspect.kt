@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.Around
 import org.aspectj.lang.annotation.Aspect
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.boot.logging.LogLevel
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -26,24 +27,18 @@ class LoggingAspect {
             return when (result) {
                 is Mono<*> -> logMono(result, logger, joinPoint, start)
                 is Flux<*> -> logFlux(result, logger, joinPoint, start)
-                else -> logResult(result, logger, joinPoint, start)
+                else -> {
+                    logResult(result, logger, joinPoint, start, LogLevel.INFO.name)
+                    joinPoint.proceed()
+                }
             }
         } catch (e: Throwable) {
             exception = e
             throw e
         } finally {
             if (result !is Mono<*> && result !is Flux<*>) {
-                logger.error(
-                    "Enter: {}.{}() with argument[s] = {}",
-                    joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    joinPoint.args
-                )
-                logger.error(
-                    "Exit: {}.{}() had arguments = {}, with error = {}, Execution time = {} ms",
-                    joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    joinPoint.args[0],
-                    exception?.message, (System.currentTimeMillis() - start)
-                )
+                logResult(result, logger, joinPoint, start, LogLevel.ERROR.name, exception)
+                joinPoint.proceed()
             }
         }
     }
@@ -52,31 +47,49 @@ class LoggingAspect {
         return mono
             .switchIfEmpty(Mono.empty<T>()
                 .doOnSuccess {
-                    logger.info(
-                        "Enter: {}.{}() with argument[s] = {}",
-                        joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                        joinPoint.args
-                    )
-                    logger.warn(
-                        "Exit: {}.{}(), with result = {}, Execution time = {} ms",
-                        joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                        "[empty]", (System.currentTimeMillis() - start)
-                    )
+                    logResult("[empty]", logger, joinPoint, start, LogLevel.WARN.name)
                 })
             .doOnSuccess { monoOutput: T ->
                 val response = if (monoOutput !== null) monoOutput.toString() else ""
-                logger.info(
-                    "Enter: {}.{}() with argument[s] = {}",
-                    joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    joinPoint.args
-                )
-                logger.info(
-                    "Exit: {}.{}(), with result = {}, Execution time = {} ms",
-                    joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    response, (System.currentTimeMillis() - start)
-                )
+                logResult(response, logger, joinPoint, start, LogLevel.INFO.name)
             }
             .doOnError { exception ->
+                logResult("[error]", logger, joinPoint, start, LogLevel.ERROR.name, exception)
+            }
+            .doOnCancel {
+                logResult("[canceled]", logger, joinPoint, start, LogLevel.WARN.name)
+            }
+    }
+
+    private fun <T> logFlux(flux: Flux<T>, logger: Logger, joinPoint: ProceedingJoinPoint, start: Long): Flux<T> {
+        return flux
+            .switchIfEmpty(Flux.empty<T>()
+                .doOnComplete {
+                    logResult("[empty]", logger, joinPoint, start, LogLevel.WARN.name)
+                })
+            .doOnNext { fluxOutput ->
+                val response = if (fluxOutput !== null) fluxOutput.toString() else ""
+                logResult(response, logger, joinPoint, start, LogLevel.INFO.name)
+            }
+            .doOnError { exception ->
+                logResult("[error]", logger, joinPoint, start, LogLevel.ERROR.name, exception)
+            }
+            .doOnCancel {
+                logResult("[canceled]", logger, joinPoint, start, LogLevel.WARN.name)
+            }
+    }
+
+    private fun <T> logResult(
+        result: T,
+        logger: Logger,
+        joinPoint: ProceedingJoinPoint,
+        start: Long,
+        level: String,
+        exception: Throwable? = null
+    ) {
+        val response = result.toString()
+        when (level) {
+            "ERROR" -> {
                 logger.error(
                     "Enter: {}.{}() with argument[s] = {}",
                     joinPoint.signature.declaringTypeName, joinPoint.signature.name,
@@ -85,11 +98,12 @@ class LoggingAspect {
                 logger.error(
                     "Exit: {}.{}(), with error = {}, Execution time = {} ms",
                     joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    exception.message, (System.currentTimeMillis() - start)
+                    exception?.message, (System.currentTimeMillis() - start)
                 )
             }
-            .doOnCancel {
-                logger.info(
+
+            "WARN" -> {
+                logger.warn(
                     "Enter: {}.{}() with argument[s] = {}",
                     joinPoint.signature.declaringTypeName, joinPoint.signature.name,
                     joinPoint.args
@@ -97,81 +111,22 @@ class LoggingAspect {
                 logger.warn(
                     "Exit: {}.{}(), with result = {}, Execution time = {} ms",
                     joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    "[cancelled]", (System.currentTimeMillis() - start)
-                )
-            }
-    }
-
-    private fun <T> logFlux(flux: Flux<T>, logger: Logger, joinPoint: ProceedingJoinPoint, start: Long): Flux<T> {
-        return flux
-            .switchIfEmpty(Flux.empty<T>()
-                .doOnComplete {
-                    logger.info(
-                        "Enter: {}.{}() with argument[s] = {}",
-                        joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                        joinPoint.args
-                    )
-                    logger.warn(
-                        "Exit: {}.{}() had arguments = {}, with result = {}, Execution time = {} ms",
-                        joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                        joinPoint.args[0],
-                        "[empty]", (System.currentTimeMillis() - start)
-                    )
-                })
-            .doOnEach {
-                val response = if (it !== null) it.toString() else ""
-                logger.info(
-                    "Enter: {}.{}() with argument[s] = {}",
-                    joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    joinPoint.args
-                )
-                logger.info(
-                    "Exit: {}.{}() had arguments = {}, with result = {}, Execution time = {} ms",
-                    joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    joinPoint.args[0],
                     response, (System.currentTimeMillis() - start)
                 )
             }
-            .doOnError { exception ->
-                logger.error(
-                    "Enter: {}.{}() with argument[s] = {}",
-                    joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    joinPoint.args
-                )
-                logger.error(
-                    "Exit: {}.{}() had arguments = {}, with error = {}, Execution time = {} ms",
-                    joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    joinPoint.args[0],
-                    exception.message, (System.currentTimeMillis() - start)
-                )
-            }
-            .doOnCancel {
+
+            else -> {
                 logger.info(
                     "Enter: {}.{}() with argument[s] = {}",
                     joinPoint.signature.declaringTypeName, joinPoint.signature.name,
                     joinPoint.args
                 )
-                logger.warn(
-                    "Exit: {}.{}() had arguments = {}, with result = {}, Execution time = {} ms",
+                logger.info(
+                    "Exit: {}.{}(), with result = {}, Execution time = {} ms",
                     joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-                    joinPoint.args[0],
-                    "[cancelled]", (System.currentTimeMillis() - start)
+                    response, (System.currentTimeMillis() - start)
                 )
             }
-    }
-
-    private fun <T> logResult(result: T, logger: Logger, joinPoint: ProceedingJoinPoint, start: Long): Any {
-        val response = result.toString()
-        logger.info(
-            "Enter: {}.{}() with argument[s] = {}",
-            joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-            joinPoint.args
-        )
-        logger.info(
-            "Exit: {}.{}(), with result = {}, Execution time = {} ms",
-            joinPoint.signature.declaringTypeName, joinPoint.signature.name,
-            response, (System.currentTimeMillis() - start)
-        )
-        return joinPoint.proceed()
+        }
     }
 }
