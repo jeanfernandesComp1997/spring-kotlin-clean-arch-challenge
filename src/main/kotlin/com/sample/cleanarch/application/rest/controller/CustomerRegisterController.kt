@@ -4,6 +4,7 @@ import com.sample.cleanarch.application.api.customer.CustomerRegisterApi
 import com.sample.cleanarch.core.dto.CreateCustomerRequestDto
 import com.sample.cleanarch.core.dto.CustomerDto
 import com.sample.cleanarch.core.usecase.CustomerRegisterUseCase
+import com.sample.cleanarch.shared.log.annotation.Loggable
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
@@ -17,6 +18,7 @@ class CustomerRegisterController(
 
     val logger: Logger = LoggerFactory.getLogger(CustomerRegisterController::class.java)
 
+    @Loggable
     override suspend fun register(createCustomerRequest: CreateCustomerRequestDto): ResponseEntity<CustomerDto> {
         val customer = customerRegisterUseCase.execute(createCustomerRequest)
         logger.info("Finish register customer, thread: ${Thread.currentThread().name}")

@@ -2,6 +2,7 @@ package com.sample.cleanarch.gateway.email
 
 import com.sample.cleanarch.core.dto.SendEmailRequestDto
 import com.sample.cleanarch.core.gateway.EmailGateway
+import com.sample.cleanarch.shared.log.annotation.Loggable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.slf4j.Logger
@@ -17,6 +18,7 @@ class EmailGatewayImpl(
 
     val logger: Logger = LoggerFactory.getLogger(EmailGatewayImpl::class.java)
 
+    @Loggable
     override suspend fun send(sendEmailRequest: SendEmailRequestDto) = withContext(Dispatchers.IO) {
         logger.info("Sending email in thread: ${Thread.currentThread().name}")
         mailService.send(generateEmail(sendEmailRequest))

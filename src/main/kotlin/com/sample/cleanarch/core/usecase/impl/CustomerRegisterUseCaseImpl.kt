@@ -12,6 +12,7 @@ import com.sample.cleanarch.core.gateway.DocumentCheckerGateway
 import com.sample.cleanarch.core.gateway.EmailGateway
 import com.sample.cleanarch.core.gateway.UserRegisterDataSourceGateway
 import com.sample.cleanarch.core.usecase.CustomerRegisterUseCase
+import com.sample.cleanarch.shared.log.annotation.Loggable
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -33,6 +34,7 @@ class CustomerRegisterUseCaseImpl(
         private const val DEFAULT_SUBJECT = "Best Bank Greetings!"
     }
 
+    @Loggable
     override suspend fun execute(createCustomerRequest: CreateCustomerRequestDto): CustomerDto {
         logger.info("Start creating customer in thread: ${Thread.currentThread().name}")
         if (userDsGateway.existsByDocumentOrEmail(createCustomerRequest.document, createCustomerRequest.email)) {
