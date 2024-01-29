@@ -13,7 +13,7 @@ import java.net.URI
 
 @RestController
 class CustomerRegisterController(
-    private val customerRegisterUseCase: CustomerRegisterUseCase
+    private val customerRegisterUseCase: CustomerRegisterUseCase,
 ) : CustomerRegisterApi {
 
     val logger: Logger = LoggerFactory.getLogger(CustomerRegisterController::class.java)
