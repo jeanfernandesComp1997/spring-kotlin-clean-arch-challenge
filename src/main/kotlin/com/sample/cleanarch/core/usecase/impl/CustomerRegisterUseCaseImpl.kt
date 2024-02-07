@@ -1,13 +1,13 @@
 package com.sample.cleanarch.core.usecase.impl
 
-import com.sample.cleanarch.core.dto.CreateCustomerRequestDto
-import com.sample.cleanarch.core.dto.CreateUserDataSourceDto
-import com.sample.cleanarch.core.dto.CustomerDto
-import com.sample.cleanarch.core.dto.EmailAddressRequestDto
-import com.sample.cleanarch.core.dto.SendEmailRequestDto
-import com.sample.cleanarch.core.entity.Customer
-import com.sample.cleanarch.core.exception.DocumentRestrictionsException
-import com.sample.cleanarch.core.exception.UserAlreadyExistsException
+import com.sample.cleanarch.core.domain.dto.CreateCustomerRequestDto
+import com.sample.cleanarch.core.domain.dto.CreateUserDataSourceDto
+import com.sample.cleanarch.core.domain.dto.CustomerDto
+import com.sample.cleanarch.core.domain.dto.EmailAddressRequestDto
+import com.sample.cleanarch.core.domain.dto.SendEmailRequestDto
+import com.sample.cleanarch.core.domain.entity.Customer
+import com.sample.cleanarch.core.domain.exception.DocumentRestrictionsException
+import com.sample.cleanarch.core.domain.exception.UserAlreadyExistsException
 import com.sample.cleanarch.core.gateway.DocumentCheckerGateway
 import com.sample.cleanarch.core.gateway.EmailGateway
 import com.sample.cleanarch.core.gateway.UserRegisterDataSourceGateway

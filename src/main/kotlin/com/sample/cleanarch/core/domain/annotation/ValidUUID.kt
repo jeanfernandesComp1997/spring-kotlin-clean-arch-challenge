@@ -1,4 +1,4 @@
-package com.sample.cleanarch.core.annotation
+package com.sample.cleanarch.core.domain.annotation
 
 import com.sample.cleanarch.core.validators.UUIDConstraintValidator
 import jakarta.validation.Constraint

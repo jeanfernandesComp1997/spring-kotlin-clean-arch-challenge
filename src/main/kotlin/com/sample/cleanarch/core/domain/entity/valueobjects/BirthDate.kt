@@ -1,4 +1,4 @@
-package com.sample.cleanarch.core.entity.valueobjects
+package com.sample.cleanarch.core.domain.entity.valueobjects
 
 import java.time.LocalDate
 import java.time.Period

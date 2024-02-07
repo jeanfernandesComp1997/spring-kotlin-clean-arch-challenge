@@ -1,8 +1,8 @@
 package com.sample.cleanarch.gateway.dataprovider
 
-import com.sample.cleanarch.core.dto.CreateUserDataSourceDto
+import com.sample.cleanarch.core.domain.dto.CreateUserDataSourceDto
 import com.sample.cleanarch.shared.mapper.UserDataMapper
-import com.sample.cleanarch.core.dto.UserDataSourceDto
+import com.sample.cleanarch.core.domain.dto.UserDataSourceDto
 import com.sample.cleanarch.core.gateway.UserFindByIdDataSourceGateway
 import com.sample.cleanarch.core.gateway.UserRegisterDataSourceGateway
 import com.sample.cleanarch.shared.log.annotation.Loggable

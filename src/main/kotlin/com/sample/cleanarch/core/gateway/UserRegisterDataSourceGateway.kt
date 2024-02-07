@@ -1,6 +1,6 @@
 package com.sample.cleanarch.core.gateway
 
-import com.sample.cleanarch.core.dto.CreateUserDataSourceDto
+import com.sample.cleanarch.core.domain.dto.CreateUserDataSourceDto
 
 interface UserRegisterDataSourceGateway {
 

@@ -1,7 +1,7 @@
 package com.sample.cleanarch.controller
 
 import com.sample.cleanarch.application.rest.controller.CustomerFindController
-import com.sample.cleanarch.core.dto.UserDataSourceDto
+import com.sample.cleanarch.core.domain.dto.UserDataSourceDto
 import com.sample.cleanarch.core.gateway.UserFindByIdDataSourceGateway
 import com.sample.cleanarch.core.usecase.impl.FindCustomerByIdUseCaseImpl
 import kotlinx.coroutines.test.runTest

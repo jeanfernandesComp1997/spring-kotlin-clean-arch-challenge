@@ -1,12 +1,12 @@
-package com.sample.cleanarch.core.dto
+package com.sample.cleanarch.core.domain.dto
 
 import java.time.LocalDate
 
-data class CustomerDto(
+class UserDataSourceDto(
     val id: String,
     val name: String,
     val document: String,
-    val birthDateTime: LocalDate,
+    val birthDate: LocalDate,
     val email: String,
     val type: String,
     val balance: Double

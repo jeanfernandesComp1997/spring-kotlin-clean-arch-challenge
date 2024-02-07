@@ -1,4 +1,4 @@
-package com.sample.cleanarch.core.dto
+package com.sample.cleanarch.core.domain.dto
 
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate

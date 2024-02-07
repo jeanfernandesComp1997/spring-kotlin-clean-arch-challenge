@@ -1,7 +1,7 @@
 package com.sample.cleanarch.application.api.customer
 
-import com.sample.cleanarch.core.dto.CreateCustomerRequestDto
-import com.sample.cleanarch.core.dto.CustomerDto
+import com.sample.cleanarch.core.domain.dto.CreateCustomerRequestDto
+import com.sample.cleanarch.core.domain.dto.CustomerDto
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

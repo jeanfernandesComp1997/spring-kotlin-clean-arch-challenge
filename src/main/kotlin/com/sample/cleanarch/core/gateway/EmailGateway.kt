@@ -1,6 +1,6 @@
 package com.sample.cleanarch.core.gateway
 
-import com.sample.cleanarch.core.dto.SendEmailRequestDto
+import com.sample.cleanarch.core.domain.dto.SendEmailRequestDto
 
 interface EmailGateway {
 

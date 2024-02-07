@@ -1,6 +1,6 @@
 package com.sample.cleanarch.gateway.email
 
-import com.sample.cleanarch.core.dto.SendEmailRequestDto
+import com.sample.cleanarch.core.domain.dto.SendEmailRequestDto
 import com.sample.cleanarch.core.gateway.EmailGateway
 import com.sample.cleanarch.shared.log.annotation.Loggable
 import kotlinx.coroutines.CoroutineScope

@@ -1,6 +1,6 @@
 package com.sample.cleanarch.core.validators
 
-import com.sample.cleanarch.core.annotation.ValidUUID
+import com.sample.cleanarch.core.domain.annotation.ValidUUID
 import jakarta.validation.ConstraintValidator
 import jakarta.validation.ConstraintValidatorContext
 import java.util.*

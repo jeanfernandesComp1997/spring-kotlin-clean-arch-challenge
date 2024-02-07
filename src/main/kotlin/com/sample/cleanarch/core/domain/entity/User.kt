@@ -1,8 +1,8 @@
-package com.sample.cleanarch.core.entity
+package com.sample.cleanarch.core.domain.entity
 
-import com.sample.cleanarch.core.entity.valueobjects.BirthDate
-import com.sample.cleanarch.core.entity.valueobjects.Email
-import com.sample.cleanarch.core.entity.valueobjects.Password
+import com.sample.cleanarch.core.domain.entity.valueobjects.BirthDate
+import com.sample.cleanarch.core.domain.entity.valueobjects.Email
+import com.sample.cleanarch.core.domain.entity.valueobjects.Password
 import java.time.LocalDate
 import java.util.UUID
 

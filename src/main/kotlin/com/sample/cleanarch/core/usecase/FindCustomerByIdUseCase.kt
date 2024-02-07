@@ -1,6 +1,6 @@
 package com.sample.cleanarch.core.usecase
 
-import com.sample.cleanarch.core.dto.CustomerDto
+import com.sample.cleanarch.core.domain.dto.CustomerDto
 
 interface FindCustomerByIdUseCase {
 

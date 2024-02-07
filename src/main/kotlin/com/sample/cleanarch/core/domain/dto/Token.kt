@@ -1,4 +1,4 @@
-package com.sample.cleanarch.core.dto
+package com.sample.cleanarch.core.domain.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 

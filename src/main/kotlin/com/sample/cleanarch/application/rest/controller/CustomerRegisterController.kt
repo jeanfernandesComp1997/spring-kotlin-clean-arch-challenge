@@ -1,8 +1,8 @@
 package com.sample.cleanarch.application.rest.controller
 
 import com.sample.cleanarch.application.api.customer.CustomerRegisterApi
-import com.sample.cleanarch.core.dto.CreateCustomerRequestDto
-import com.sample.cleanarch.core.dto.CustomerDto
+import com.sample.cleanarch.core.domain.dto.CreateCustomerRequestDto
+import com.sample.cleanarch.core.domain.dto.CustomerDto
 import com.sample.cleanarch.core.usecase.CustomerRegisterUseCase
 import com.sample.cleanarch.shared.log.annotation.Loggable
 import org.slf4j.Logger

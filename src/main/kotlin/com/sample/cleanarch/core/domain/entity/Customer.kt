@@ -1,11 +1,11 @@
-package com.sample.cleanarch.core.entity
+package com.sample.cleanarch.core.domain.entity
 
-import com.sample.cleanarch.core.entity.valueobjects.UserType
+import com.sample.cleanarch.core.domain.entity.valueobjects.UserType
 import java.time.LocalDate
 
-class ShopKeeper : User {
+class Customer : User {
 
-    val type = UserType.SHOPKEEPER
+    val type = UserType.COMMON_CUSTOMER
 
     constructor(
         name: String,

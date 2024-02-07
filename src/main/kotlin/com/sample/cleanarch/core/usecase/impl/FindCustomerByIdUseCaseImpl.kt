@@ -1,8 +1,8 @@
 package com.sample.cleanarch.core.usecase.impl
 
-import com.sample.cleanarch.core.dto.CustomerDto
-import com.sample.cleanarch.core.entity.valueobjects.UserType
-import com.sample.cleanarch.core.exception.CustomerNotFoundException
+import com.sample.cleanarch.core.domain.dto.CustomerDto
+import com.sample.cleanarch.core.domain.entity.valueobjects.UserType
+import com.sample.cleanarch.core.domain.exception.CustomerNotFoundException
 import com.sample.cleanarch.core.gateway.UserFindByIdDataSourceGateway
 import com.sample.cleanarch.core.usecase.FindCustomerByIdUseCase
 import com.sample.cleanarch.shared.log.annotation.Loggable

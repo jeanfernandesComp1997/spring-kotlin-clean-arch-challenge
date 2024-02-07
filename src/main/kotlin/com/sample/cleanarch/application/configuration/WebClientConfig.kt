@@ -1,6 +1,6 @@
 package com.sample.cleanarch.application.configuration
 
-import com.sample.cleanarch.core.dto.Token
+import com.sample.cleanarch.core.domain.dto.Token
 import io.netty.handler.logging.LogLevel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
