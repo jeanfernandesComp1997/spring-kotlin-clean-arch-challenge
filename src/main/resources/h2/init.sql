@@ -1,7 +1,7 @@
 create table users (
     id varchar(36),
     name varchar(50),
-    document varchar(11),
+    document varchar(200),
     birth_date date,
     email varchar(50),
     password varchar(200),

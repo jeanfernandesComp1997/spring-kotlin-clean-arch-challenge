@@ -11,6 +11,7 @@ class ControllerExceptionHandler {
 
     val logger: Logger = LoggerFactory.getLogger(ControllerExceptionHandler::class.java)
 
+    // this generic error handling is only for tests, for production never return details of the exception
     @ExceptionHandler(Exception::class)
     fun handleException(exception: Exception): ResponseEntity<Any> {
         logger.info("Handling exception in thread: ${Thread.currentThread().name}")

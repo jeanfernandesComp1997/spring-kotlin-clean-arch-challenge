@@ -1,6 +1,6 @@
 package com.sample.cleanarch.core.usecase.impl
 
-import com.sample.cleanarch.core.domain.dto.CreateCustomerRequestDto
+import com.sample.cleanarch.core.domain.dto.CreateCustomerInputDto
 import com.sample.cleanarch.core.domain.dto.CreateUserDataSourceDto
 import com.sample.cleanarch.core.domain.dto.CustomerDto
 import com.sample.cleanarch.core.domain.dto.EmailAddressRequestDto
@@ -35,7 +35,7 @@ class CustomerRegisterUseCaseImpl(
     }
 
     @Loggable
-    override suspend fun execute(createCustomerRequest: CreateCustomerRequestDto): CustomerDto {
+    override suspend fun execute(createCustomerRequest: CreateCustomerInputDto): CustomerDto {
         logger.info("Start creating customer in thread: ${Thread.currentThread().name}")
         if (userDsGateway.existsByDocumentOrEmail(createCustomerRequest.document, createCustomerRequest.email)) {
             throw UserAlreadyExistsException()

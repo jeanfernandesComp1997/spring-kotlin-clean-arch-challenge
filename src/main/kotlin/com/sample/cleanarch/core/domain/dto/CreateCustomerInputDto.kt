@@ -1,12 +1,10 @@
 package com.sample.cleanarch.core.domain.dto
 
-import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 
-data class CreateCustomerRequestDto(
+data class CreateCustomerInputDto(
     val name: String,
     val document: String,
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     val birthDate: LocalDate,
     val email: String,
     val password: String

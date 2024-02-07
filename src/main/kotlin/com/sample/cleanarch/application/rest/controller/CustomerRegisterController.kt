@@ -1,7 +1,7 @@
 package com.sample.cleanarch.application.rest.controller
 
 import com.sample.cleanarch.application.api.customer.CustomerRegisterApi
-import com.sample.cleanarch.core.domain.dto.CreateCustomerRequestDto
+import com.sample.cleanarch.application.api.customer.request.CreateCustomerRequest
 import com.sample.cleanarch.core.domain.dto.CustomerDto
 import com.sample.cleanarch.core.usecase.CustomerRegisterUseCase
 import com.sample.cleanarch.shared.log.annotation.Loggable
@@ -19,8 +19,9 @@ class CustomerRegisterController(
     val logger: Logger = LoggerFactory.getLogger(CustomerRegisterController::class.java)
 
     @Loggable
-    override suspend fun register(createCustomerRequest: CreateCustomerRequestDto): ResponseEntity<CustomerDto> {
-        val customer = customerRegisterUseCase.execute(createCustomerRequest)
+    override suspend fun register(createCustomerRequest: CreateCustomerRequest): ResponseEntity<CustomerDto> {
+        val createCustomerInput = createCustomerRequest.toCreateInputDto()
+        val customer = customerRegisterUseCase.execute(createCustomerInput)
         logger.info("Finish register customer, thread: ${Thread.currentThread().name}")
         return ResponseEntity
             .created(URI.create("/customers/${customer.id}"))
