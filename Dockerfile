@@ -6,4 +6,4 @@ RUN mkdir /app
 
 COPY build/libs/*.jar /app/spring-boot-application.jar
 
-ENTRYPOINT ["java","-Xmx300M", "-Xms300M", "-XX:+UnlockExperimentalVMOptions", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/spring-boot-application.jar"]
+ENTRYPOINT ["java","-Xmx500M", "-Xms500M", "-XX:+UnlockExperimentalVMOptions", "-Djava.security.egd=file:/dev/./urandom","-jar","/app/spring-boot-application.jar"]

@@ -17,4 +17,8 @@ interface CustomerFindApi {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     suspend fun findById(@PathVariable("id") @Valid @ValidUUID id: String): CustomerDto
+
+    @GetMapping("/{id}/no-restrictions")
+    @ResponseStatus(HttpStatus.OK)
+    suspend fun findByIdOnlyHaveNoRestrictions(@PathVariable("id") @Valid @ValidUUID id: String): CustomerDto
 }

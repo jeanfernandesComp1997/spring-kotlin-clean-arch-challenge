@@ -4,6 +4,7 @@ import com.sample.cleanarch.core.domain.dto.Token
 import io.netty.handler.logging.LogLevel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
@@ -24,15 +25,15 @@ class WebClientConfig {
 
     @Primary
     @Bean
-    fun defaultWebClient(): WebClient {
+    fun defaultWebClient(@Value("\${http.base-uri}") baseUri: String = ""): WebClient {
         return WebClient
             .builder()
-            .baseUrl("http://localhost:9000")
+            .baseUrl(baseUri)
             .build()
     }
 
     @Bean
-    fun authenticatedWebClient(): WebClient {
+    fun authenticatedWebClient(@Value("\${http.base-uri}") baseUri: String): WebClient {
         val httpClient = HttpClient
             .create()
             .wiretap(
@@ -43,7 +44,7 @@ class WebClientConfig {
         return WebClient
             .builder()
             .clientConnector(ReactorClientHttpConnector(httpClient))
-            .baseUrl("http://localhost:9000")
+            .baseUrl(baseUri)
             .filter(this::setSessionTokenAsync)
             .build()
     }

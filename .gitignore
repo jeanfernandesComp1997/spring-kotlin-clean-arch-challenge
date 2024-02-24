@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### ENV FILE ###
+.env
+
+### GRAFANA ###
+grafana

@@ -1,0 +1,81 @@
+version: '3.7'
+
+services:
+  api_service:
+    build: .
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      - H2_ACTIVE=${H2_ACTIVE}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PASS=${SMTP_PASS}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - BASE_URI_WIREMOCK=http://wiremock:9000
+    depends_on:
+      - wiremock
+    deploy:
+      resources:
+        limits:
+          cpus: '0.35'
+          memory: 1024M
+        reservations:
+          cpus: '0.25'
+          memory: 700M
+    networks:
+      network-example:
+        ipv4_address: 10.5.0.2
+
+  wiremock:
+    image: wiremock/wiremock:latest
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./mappings:/home/wiremock/mappings
+    command: ["--port=9000"]
+    networks:
+      network-example:
+        ipv4_address: 10.5.0.3
+
+  prometheus:
+    image: prom/prometheus:v2.38.0
+    container_name: prometheus-container
+    depends_on:
+      - api_service
+    volumes:
+      - ./:/etc/prometheus/
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+    restart: always
+    networks:
+      network-example:
+        ipv4_address: 10.5.0.4
+
+  grafana:
+    image: grafana/grafana-oss:9.1.4
+    user: "$UID:$GID"
+    container_name: grafana-container
+    depends_on:
+      - prometheus
+      - api_service
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SERVER_DOMAIN=localhost
+    networks:
+      network-example:
+        ipv4_address: 10.5.0.5
+
+networks:
+  network-example:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.5.0.0/16
+          gateway: 10.5.0.1

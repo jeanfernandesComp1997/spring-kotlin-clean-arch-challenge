@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: webfluxapi
   r2dbc:
     url: r2dbc:h2:mem:///userdb
     username:
@@ -32,6 +34,9 @@ database:
   h2:
     active: ${H2_ACTIVE}
 
+http:
+  base-uri: ${BASE_URI_WIREMOCK}
+
 logging:
   level:
     io.r2dbc.h2: DEBUG
@@ -40,4 +45,4 @@ management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health,prometheus

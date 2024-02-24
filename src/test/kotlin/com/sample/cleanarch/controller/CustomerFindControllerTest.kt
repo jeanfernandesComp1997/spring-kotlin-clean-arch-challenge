@@ -3,6 +3,7 @@ package com.sample.cleanarch.controller
 import com.sample.cleanarch.application.rest.controller.CustomerFindController
 import com.sample.cleanarch.core.domain.dto.UserDataSourceDto
 import com.sample.cleanarch.core.gateway.UserFindByIdDataSourceGateway
+import com.sample.cleanarch.core.usecase.FindCustomerByIdOnlyHaveNoRestrictionsUseCase
 import com.sample.cleanarch.core.usecase.impl.FindCustomerByIdUseCaseImpl
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Test
@@ -24,6 +25,9 @@ class CustomerFindControllerTest {
 
     @MockBean
     private lateinit var userFindByIdDataSourceGateway: UserFindByIdDataSourceGateway
+
+    @MockBean
+    private lateinit var findCustomerByIdOnlyHaveNoRestrictionsUseCase: FindCustomerByIdOnlyHaveNoRestrictionsUseCase
 
     @Autowired
     private lateinit var webTestClient: WebTestClient
