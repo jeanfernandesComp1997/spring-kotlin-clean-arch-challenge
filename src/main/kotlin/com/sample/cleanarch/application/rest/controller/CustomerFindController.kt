@@ -6,6 +6,7 @@ import com.sample.cleanarch.core.usecase.FindCustomerByIdOnlyHaveNoRestrictionsU
 import com.sample.cleanarch.core.usecase.FindCustomerByIdUseCase
 import com.sample.cleanarch.shared.log.annotation.Loggable
 import org.springframework.web.bind.annotation.RestController
+import reactor.core.publisher.Mono
 
 @RestController
 class CustomerFindController(
@@ -21,5 +22,10 @@ class CustomerFindController(
     @Loggable
     override suspend fun findByIdOnlyHaveNoRestrictions(id: String): CustomerDto {
         return findCustomerByIdOnlyHaveNoRestrictionsUseCase.execute(id)
+    }
+
+    @Loggable
+    override fun findByIdOnlyHaveNoRestrictionsFlux(id: String): Mono<CustomerDto> {
+        return findCustomerByIdOnlyHaveNoRestrictionsUseCase.executeFlux(Mono.just(id))
     }
 }

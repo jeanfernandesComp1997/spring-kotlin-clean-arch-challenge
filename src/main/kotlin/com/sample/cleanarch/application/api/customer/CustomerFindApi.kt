@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
+import reactor.core.publisher.Mono
 
 @RequestMapping("customers")
 @Validated
@@ -21,4 +22,8 @@ interface CustomerFindApi {
     @GetMapping("/{id}/no-restrictions")
     @ResponseStatus(HttpStatus.OK)
     suspend fun findByIdOnlyHaveNoRestrictions(@PathVariable("id") @Valid @ValidUUID id: String): CustomerDto
+
+    @GetMapping("/{id}/no-restrictions-flux")
+    @ResponseStatus(HttpStatus.OK)
+    fun findByIdOnlyHaveNoRestrictionsFlux(@PathVariable("id") @Valid @ValidUUID id: String): Mono<CustomerDto>
 }

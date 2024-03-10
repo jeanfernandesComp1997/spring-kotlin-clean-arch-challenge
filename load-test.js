@@ -21,6 +21,6 @@ export const options = {
 //}
 
 export default function () {
-     let res = http.get('http://localhost:8080/customers/00b3eaa7-a684-4f30-a998-87f0c23bd321/no-restrictions');
+     let res = http.get('http://localhost:8080/customers/df967deb-f92e-444a-9873-b1369ef5e2aa/no-restrictions');
   check(res, { 'status was 200': (r) => r.status == 200 });
 }
