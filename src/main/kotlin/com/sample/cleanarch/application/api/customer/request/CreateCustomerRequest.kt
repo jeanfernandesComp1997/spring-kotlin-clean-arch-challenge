@@ -15,7 +15,7 @@ data class CreateCustomerRequest(
 
     fun toCreateInputDto(): CreateCustomerInputDto {
         return CreateCustomerInputDto(
-            name = this.document,
+            name = this.name,
             document = this.document,
             birthDate = this.birthDate,
             email = this.email,

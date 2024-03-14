@@ -49,6 +49,7 @@ class FindCustomerByIdOnlyHaveNoRestrictionsUseCaseImpl(
         if (restrictions.isEmpty().not()) {
             throw DocumentRestrictionsException()
         }
+        logger.info("Finish search customer in thread: ${Thread.currentThread().name}")
         return customer
     }
 
